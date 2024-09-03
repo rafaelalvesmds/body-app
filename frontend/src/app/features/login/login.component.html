@@ -1,0 +1,6 @@
+<div [formGroup]="loginForm()">
+    <input type="text" formControlName="email" placeholder="Email">
+    <input type="password" formControlName="password" placeholder="Password">
+    <button (click)="login()">Login</button>
+    <button (click)="register()">register</button>
+</div>
