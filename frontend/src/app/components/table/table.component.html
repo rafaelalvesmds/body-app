@@ -1,0 +1,55 @@
+<p-table [value]="data()" [responsiveLayout]="'stack'" [breakpoint]="'960px'">
+  <ng-template pTemplate="header">
+    <tr>
+      @for(column of columns(); track $index){
+      <th class="p-2" [style.width]="column.width">{{ column.header }}</th>
+      } @if(actions()){
+      <th class="p-2"></th>
+      }
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-data>
+    <tr>
+      @for(column of columns(); track $index){ @if(!column?.type) {
+      <td class="p-2" [style.width]="column.width">{{ data[column.field] }}</td>
+      } @if(column?.type === 'date') {
+      <td class="p-2" [style.width]="column.width">
+        {{ data[column.field] | date : "dd/MM/yyyy" }}
+      </td>
+      } @if(column?.type === 'image') {
+      <td class="p-2" [style.width]="column.width">
+        <p-avatar
+          [image]="data[column.field]"
+          styleClass="bg-gray-100"
+          size="normal"
+          shape="circle"
+          [icon]="'pi pi-user'"
+        />
+      </td>
+      } @if(column.type === 'tag') {
+      <td>
+        <p-tag
+          [value]="data[column.field] ? 'Ativo' : 'Inativo'"
+          [severity]="data[column.field] ? 'success' : 'danger'"
+        />
+      </td>
+      } } @if(actions()) {
+      <td class="p-2">
+        <div class="flex flex-row justify-content-end gap-2">
+          @for (action of actions(); track $index) {
+          <p-button
+            [icon]="action.icon"
+            [severity]="action.severity || 'secondary'"
+            [rounded]="true"
+            [text]="true"
+            styleClass="h-2rem w-2rem"
+            (onClick)="action.method(data)"
+          ></p-button>
+
+          }
+        </div>
+      </td>
+      }
+    </tr>
+  </ng-template>
+</p-table>

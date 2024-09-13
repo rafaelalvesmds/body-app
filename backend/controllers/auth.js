@@ -4,15 +4,10 @@ const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 require('dotenv').config();
 
-const app = express();
 const prisma = new PrismaClient();
-const cors = require('cors');
+const router = express.Router();
 
-app.use(cors());
-app.use(express.json());
-
-// Registro de usuário
-app.post('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -35,8 +30,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// Login de usuário
-app.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const user = await prisma.user.findUnique({ where: { email } });
     if (user && await bcrypt.compare(password, user.password)) {
@@ -47,7 +41,4 @@ app.post('/login', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+module.exports = router;  // Exporta o router
